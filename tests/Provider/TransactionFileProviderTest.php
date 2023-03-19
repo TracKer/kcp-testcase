@@ -50,7 +50,7 @@ class TransactionFileProviderTest extends TestCase
         $provider = new TransactionFileProvider($filePath);
 
         $this->expectException(FileDoesNotExistException::class);
-        $result = iterator_to_array($provider->getList());
+        iterator_to_array($provider->getList());
     }
 
     public function testGetListThrowsFileAccessExceptionIfUnableToOpenFile(): void
@@ -60,7 +60,7 @@ class TransactionFileProviderTest extends TestCase
         $provider = new TransactionFileProvider($filePath);
 
         $this->expectException(FileAccessException::class);
-        $result = iterator_to_array($provider->getList());
+        iterator_to_array($provider->getList());
     }
 
     public function testGetListThrowsUnsupportedDataStructureExceptionIfUnsupportedDataStructure(): void
@@ -74,6 +74,6 @@ class TransactionFileProviderTest extends TestCase
         $provider = new TransactionFileProvider($filePath);
 
         $this->expectException(UnsupportedDataStructureException::class);
-        $result = iterator_to_array($provider->getList());
+        iterator_to_array($provider->getList());
     }
 }

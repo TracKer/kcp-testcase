@@ -7,12 +7,8 @@ use App\Exception\IncorrectApiStatusCode;
 use App\Exception\UnknownCurrencyException;
 use App\Exception\UnsupportedDataStructureException;
 use App\Provider\Rate\RateApiProvider;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
