@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Tests\Provider\Transaction;
+namespace App\Tests\Provider;
 
-use App\Provider\Transaction\TransactionFileProvider;
 use App\Dto\TransactionDto;
 use App\Exception\FileAccessException;
 use App\Exception\FileDoesNotExistException;
 use App\Exception\UnsupportedDataStructureException;
+use App\Provider\Transaction\TransactionFileProvider;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
@@ -14,13 +14,11 @@ use PHPUnit\Framework\TestCase;
 class TransactionFileProviderTest extends TestCase
 {
     private vfsStreamDirectory $fs;
-    private string $fsScheme;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->fsScheme = str_replace('\\', '', self::class);
         $this->fs = vfsStream::setup();
     }
 
