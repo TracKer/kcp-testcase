@@ -39,10 +39,6 @@ class Container extends ContainerBuilder
             ->setPublic(true)
             ->setAutowired(true);
 
-        $this->register(CountryChecker::class, CountryChecker::class)
-            ->setPublic(true)
-            ->setAutowired(true);
-
         $this->register(CommissionCalculator::class, CommissionCalculator::class)
             ->setPublic(true)
             ->setAutowired(true)

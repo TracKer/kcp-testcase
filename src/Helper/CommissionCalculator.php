@@ -6,17 +6,16 @@ use Exception;
 
 class CommissionCalculator
 {
-    private CountryChecker $countryChecker;
+    private const EUROPEAN_COUNTRIES = [
+        'AT', 'BE', 'BG', 'CY', 'CZ', 'DE', 'DK', 'EE', 'ES',
+        'FI', 'FR', 'GR', 'HR', 'HU', 'IE', 'IT', 'LT', 'LU',
+        'LV', 'MT', 'NL', 'PO', 'PT', 'RO', 'SE', 'SI', 'SK',
+    ];
 
     private ?string $countryCode = null;
     private ?string $currency = null;
     private ?float $rate = null;
     private ?float $amount = null;
-
-    public function __construct(CountryChecker $countryChecker)
-    {
-        $this->countryChecker = $countryChecker;
-    }
 
     public function calculateCommission(): float
     {
@@ -42,7 +41,7 @@ class CommissionCalculator
             $value /= $this->rate;
         }
 
-        $multiplier = $this->countryChecker->isEuropeanCountry($this->countryCode) ? 0.01 : 0.02;
+        $multiplier = $this->isEuropeanCountry($this->countryCode) ? 0.01 : 0.02;
 
         return $value * $multiplier;
     }
@@ -69,5 +68,10 @@ class CommissionCalculator
     {
         $this->amount = $amount;
         return $this;
+    }
+
+    private function isEuropeanCountry($countryCode): bool
+    {
+        return in_array($countryCode, self::EUROPEAN_COUNTRIES);
     }
 }
