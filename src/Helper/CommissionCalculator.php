@@ -3,7 +3,6 @@
 namespace App\Helper;
 
 use App\Exception\PropertyNotSetException;
-use Exception;
 
 class CommissionCalculator
 {
