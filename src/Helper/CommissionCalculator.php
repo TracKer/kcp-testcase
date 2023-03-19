@@ -43,7 +43,12 @@ class CommissionCalculator
 
         $multiplier = $this->isEuropeanCountry($this->countryCode) ? 0.01 : 0.02;
 
-        return $value * $multiplier;
+        $commission = $value * $multiplier;
+
+        // Apply ceiling
+        $commission = ceil($commission * 100) / 100;
+
+        return $commission;
     }
 
     public function setCountryCode(string $countryCode): CommissionCalculator
@@ -70,7 +75,7 @@ class CommissionCalculator
         return $this;
     }
 
-    private function isEuropeanCountry($countryCode): bool
+    private static function isEuropeanCountry($countryCode): bool
     {
         return in_array($countryCode, self::EUROPEAN_COUNTRIES);
     }
