@@ -16,6 +16,12 @@ class TransactionFileProvider implements TransactionProviderInterface
         $this->fileName = $fileName;
     }
 
+    /**
+     * @return iterable
+     * @throws FileAccessException
+     * @throws FileDoesNotExistException
+     * @throws UnsupportedDataStructureException
+     */
     public function getList(): iterable
     {
         if (!file_exists($this->fileName)) {
