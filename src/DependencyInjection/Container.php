@@ -9,7 +9,9 @@ use App\Provider\Rate\RateApiProvider;
 use App\Provider\Rate\RateProviderInterface;
 use App\Provider\Transaction\TransactionFileProvider;
 use App\Provider\Transaction\TransactionProviderInterface;
+use GuzzleHttp\HandlerStack;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 class Container extends ContainerBuilder
 {
@@ -36,12 +38,16 @@ class Container extends ContainerBuilder
 
         $this->register(RateProviderInterface::class, RateApiProvider::class)
             ->setPublic(true)
-            ->setAutowired(true);
+            ->setAutowired(true)
+            ->setArgument('$handlerStack', new Reference(HandlerStack::class));
 
         $this->register(CommissionCalculator::class, CommissionCalculator::class)
             ->setPublic(true)
             ->setAutowired(true)
             ->setShared(false);
+
+        $this->register(HandlerStack::class)
+            ->setFactory([self::class, 'constructHandlerStack']);
     }
 
     private function registerParameters()
@@ -49,5 +55,10 @@ class Container extends ContainerBuilder
         global $argv;
 
         $this->setParameter('transactionsFileName', $argv[1]);
+    }
+
+    public static function constructHandlerStack(): HandlerStack
+    {
+        return HandlerStack::create();
     }
 }
