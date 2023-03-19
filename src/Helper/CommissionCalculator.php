@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Exception\PropertyNotSetException;
 use Exception;
 
 class CommissionCalculator
@@ -17,22 +18,26 @@ class CommissionCalculator
     private ?float $rate = null;
     private ?float $amount = null;
 
+    /**
+     * @return float
+     * @throws PropertyNotSetException
+     */
     public function calculateCommission(): float
     {
         if ($this->countryCode === null) {
-            throw new Exception('Country code is not set');
+            throw new PropertyNotSetException('Country code is not set');
         }
 
         if ($this->currency === null) {
-            throw new Exception('Currency is not set');
+            throw new PropertyNotSetException('Currency is not set');
         }
 
         if ($this->rate === null) {
-            throw new Exception('Rate is not set');
+            throw new PropertyNotSetException('Rate is not set');
         }
 
         if ($this->amount === null) {
-            throw new Exception('Amount is not set');
+            throw new PropertyNotSetException('Amount is not set');
         }
 
         $value = $this->amount;

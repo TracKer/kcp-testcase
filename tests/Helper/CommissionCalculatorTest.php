@@ -2,6 +2,7 @@
 
 namespace App\Tests\Helper;
 
+use App\Exception\PropertyNotSetException;
 use App\Helper\CommissionCalculator;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -60,10 +61,10 @@ class CommissionCalculatorTest extends TestCase
             ['JP', 'AUD', 2.5, 100, 0.80],
 
             // Missing input parameters
-            [null, 'EUR', 1, 100, Exception::class],
-            ['DE', null, 1, 100, Exception::class],
-            ['DE', 'EUR', null, 100, Exception::class],
-            ['DE', 'EUR', 1, null, Exception::class],
+            [null, 'EUR', 1, 100, PropertyNotSetException::class],
+            ['DE', null, 1, 100, PropertyNotSetException::class],
+            ['DE', 'EUR', null, 100, PropertyNotSetException::class],
+            ['DE', 'EUR', 1, null, PropertyNotSetException::class],
         ];
     }
 
