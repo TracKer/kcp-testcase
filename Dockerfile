@@ -35,7 +35,6 @@ RUN if [ "${APP_ENV}" == "production" ]; then \
       composer install --optimize-autoloader; \
     fi;
 
-#CMD [ "php", "./run.php" ]
-CMD 'bash'
+CMD [ "php", "./run.php", "input.txt" ]
 
 USER $USER
