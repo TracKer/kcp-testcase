@@ -31,6 +31,13 @@ class TransactionFileProvider implements TransactionProviderInterface
             while (($line = fgets($file)) !== false) {
                 $dataItem = json_decode(trim($line), true, flags: JSON_THROW_ON_ERROR);
 
+                // Check structure
+                $requiredKeys = ['bin', 'amount', 'currency'];
+                $common = array_intersect($requiredKeys, array_keys($dataItem));
+                if (count($common) !== count($requiredKeys)) {
+                    throw new \OutOfRangeException();
+                }
+
                 $item = new TransactionDto();
                 $item->setBin($dataItem['bin']);
                 $item->setAmount(floatval($dataItem['amount']));
@@ -38,7 +45,7 @@ class TransactionFileProvider implements TransactionProviderInterface
 
                 yield $item;
             }
-        } catch (\OutOfRangeException|\JsonException $e) {
+        } catch (\Exception $e) {
             throw new UnsupportedDataStructureException('Unsupported data structure of transaction file', previous: $e);
         }
 
