@@ -34,7 +34,8 @@ class Container extends ContainerBuilder
 
         $this->register(BankIdentificationNumberProviderInterface::class, BankIdentificationNumberApiProvider::class)
             ->setPublic(true)
-            ->setAutowired(true);
+            ->setAutowired(true)
+            ->setArgument('$handlerStack', new Reference(HandlerStack::class));
 
         $this->register(RateProviderInterface::class, RateApiProvider::class)
             ->setPublic(true)

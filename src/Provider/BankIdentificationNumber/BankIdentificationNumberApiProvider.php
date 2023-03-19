@@ -2,9 +2,13 @@
 
 namespace App\Provider\BankIdentificationNumber;
 
-use Exception;
+use App\Exception\ApiRequestFailureException;
+use App\Exception\IncorrectApiStatusCode;
+use App\Exception\UnsupportedDataStructureException;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\HandlerStack;
 
 class BankIdentificationNumberApiProvider implements BankIdentificationNumberProviderInterface
 
@@ -13,9 +17,10 @@ class BankIdentificationNumberApiProvider implements BankIdentificationNumberPro
 
     private ClientInterface $client;
 
-    public function __construct()
+    public function __construct(HandlerStack $handlerStack)
     {
         $parameters = [];
+        $parameters['handler'] = $handlerStack;
         $parameters['base_uri'] = 'https://lookup.binlist.net/';
 
         $this->client = new Client($parameters);
@@ -27,14 +32,27 @@ class BankIdentificationNumberApiProvider implements BankIdentificationNumberPro
             return $this->cache[$bin];
         }
 
-        $response = $this->client->get($bin);
-        if ($response->getStatusCode() !== 200) {
-            throw new Exception('Incorrect status code');
-        }
+        try {
+            $response = $this->client->get($bin);
+            if ($response->getStatusCode() !== 200) {
+                throw new IncorrectApiStatusCode('Incorrect status code');
+            }
 
-        $data = $response->getBody()->getContents();
-        $data = json_decode(trim($data), true, flags: JSON_THROW_ON_ERROR);
-        $data = $data['country']['alpha2'];
+            $data = $response->getBody()->getContents();
+            $data = json_decode(trim($data), true, flags: JSON_THROW_ON_ERROR);
+
+            if (!isset($data['country']['alpha2'])) {
+                throw new \OutOfRangeException();
+            }
+
+            $data = $data['country']['alpha2'];
+        } catch (IncorrectApiStatusCode $e) {
+            throw $e;
+        } catch (\OutOfRangeException|\JsonException $e) {
+            throw new UnsupportedDataStructureException('Unsupported data structure of API response', previous: $e);
+        } catch (GuzzleException $e) {
+            throw new ApiRequestFailureException('API request failed', previous: $e);
+        }
 
         $this->cache[$bin] = $data;
         return $data;
