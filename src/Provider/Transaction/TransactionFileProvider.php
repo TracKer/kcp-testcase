@@ -28,7 +28,7 @@ class TransactionFileProvider implements TransactionProviderInterface
             throw new FileDoesNotExistException('Transaction file not found');
         }
 
-        $file = fopen($this->fileName, "r");
+        $file = @fopen($this->fileName, "r");
         if (!is_resource($file)) {
             throw new FileAccessException('Unable to open transaction file for reading');
         }
