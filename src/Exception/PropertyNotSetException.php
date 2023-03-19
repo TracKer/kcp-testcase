@@ -2,8 +2,7 @@
 
 namespace App\Exception;
 
-use Exception;
-class PropertyNotSetException extends Exception
+class PropertyNotSetException extends \Exception
 {
 
 }
