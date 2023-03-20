@@ -29,12 +29,16 @@ COPY --chown=$USER:$USER --chmod=755 . /app/
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Install dependencies
-RUN if [ "${APP_ENV}" == "production" ]; then \
+RUN if [ "${APP_ENV}" = "production" ]; then \
       composer install --no-dev --optimize-autoloader; \
     else \
       composer install --optimize-autoloader; \
     fi;
 
-CMD [ "php", "./run.php", "input.txt" ]
+CMD if [ "${APP_ENV}" = "production" ]; then \
+          php ./run.php input.txt; \
+        else \
+          php ./vendor/bin/phpunit --display-warnings; \
+        fi;
 
 USER $USER
