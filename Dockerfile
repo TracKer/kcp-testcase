@@ -36,9 +36,9 @@ RUN if [ "${APP_ENV}" = "production" ]; then \
     fi;
 
 CMD if [ "${APP_ENV}" = "production" ]; then \
-          php ./run.php input.txt; \
-        else \
-          php ./vendor/bin/phpunit --display-warnings; \
-        fi;
+      php ./run.php input.txt; \
+    else \
+      php ./vendor/bin/phpunit --display-warnings; \
+    fi;
 
 USER $USER
